@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f9f8fc">
+  <meta name="description" content="Создай тренировочную работу по фото, PDF или тексту контрольной.">
+  <title>Вариант · Тренажёр контрольных</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <a class="brand" href="/" aria-label="Вариант, главная"><span class="brand-mark" aria-hidden="true">В</span>Вариант</a>
+      <button class="settings-button" id="open-settings" type="button"><span aria-hidden="true">⚙</span> Настройки ИИ</button>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">ТРЕНАЖЁР КОНТРОЛЬНЫХ</p>
+        <h1>Потренируйся<br>на <em>своём варианте.</em></h1>
+        <p class="intro">Загрузи контрольную или самостоятельную. ИИ составит новые задания по тем же темам и подберёт сопоставимую сложность.</p>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="paper back-paper"></div>
+        <div class="paper front-paper">
+          <div class="paper-kicker">ТРЕНИРОВОЧНАЯ РАБОТА</div>
+          <div class="paper-title">Алгебра</div>
+          <div class="paper-line"><b>01</b><span>3x − 7 = 2x + 5</span></div>
+          <div class="paper-line"><b>02</b><span>(x − 4)(x + 4)</span></div>
+          <div class="paper-line"><b>03</b><span>y = 2x + 1</span></div>
+        </div>
+        <span class="art-sparkle">✦</span>
+        <span class="art-check">✓</span>
+      </div>
+    </section>
+    <div class="workbench">
+      <section class="panel input-panel" aria-labelledby="input-title">
+        <div class="panel-heading"><div class="step">01</div><h2 id="input-title">Исходная работа</h2></div>
+        <p class="panel-note">Добавь файл или вставь условия заданий.</p>
+        <div class="mode" role="group" aria-label="Способ ввода">
+          <button type="button" id="file-mode" aria-pressed="true">Файл</button>
+          <button type="button" id="text-mode" aria-pressed="false">Текст</button>
+        </div>
+        <form id="generate-form">
+          <div id="file-panel">
+            <input id="file" class="visually-hidden" type="file" tabindex="-1" accept=".jpg,.jpeg,.png,.webp,.pdf,.txt">
+            <button type="button" id="drop" class="drop">
+              <span class="upload-icon" aria-hidden="true">↑</span>
+              <strong>Выбрать файл</strong>
+              <span class="drop-hint">или перетащить сюда</span>
+              <small>JPG, PNG, WEBP, PDF, TXT · до 10 МБ</small>
+            </button>
+            <div class="file-row" id="file-row" hidden>
+              <img id="thumbnail" alt="" hidden>
+              <div class="file-info"><strong id="file-name"></strong><small id="file-size"></small></div>
+              <button type="button" class="icon-button" id="clear-file" aria-label="Убрать файл">×</button>
+            </div>
+          </div>
+          <div id="text-panel" hidden>
+            <label class="visually-hidden" for="source-text">Текст исходных заданий</label>
+            <textarea id="source-text" rows="6" maxlength="16000" placeholder="Например: 1. Реши уравнение 3x − 7 = 2x + 5…"></textarea>
+          </div>
+          <p id="error" class="error" role="alert" hidden></p>
+          <p class="privacy">При генерации работа отправляется в OpenAI для обработки. Сайт не сохраняет файл.</p>
+          <button id="generate" class="primary" type="submit"><span aria-hidden="true">✦</span> Создать вариант</button>
+          <button id="cancel" class="text-button" type="button" hidden>Отменить</button>
+        </form>
+      </section>
+      <section class="panel result-panel" aria-labelledby="result-title" id="result-panel" tabindex="-1">
+        <div class="panel-heading"><div class="step">02</div><h2 id="result-title">Твой вариант</h2></div>
+        <div id="empty" class="empty">
+          <div class="empty-art" aria-hidden="true"><span></span><span></span><span></span><b>✦</b></div>
+          <h3>Здесь появятся задания</h3>
+          <p>После генерации можешь решить их и свериться с ответами.</p>
+          <button type="button" id="example" class="secondary">Посмотреть пример</button>
+        </div>
+        <div id="loading" class="empty" hidden>
+          <div class="spinner" aria-hidden="true"></div>
+          <h3>Составляем вариант</h3>
+          <p>ИИ разбирает исходную работу и подбирает новые задания.</p>
+        </div>
+        <div id="result" hidden></div>
+      </section>
+    </div>
+    <p class="visually-hidden" id="status" role="status"></p>
+  </main>
+  <footer class="wrap footer"><span>Вариант</span><span>Задания и ответы ИИ могут содержать ошибки.</span></footer>
+  <dialog id="settings">
+    <form id="settings-form">
+      <div class="dialog-heading"><h2>Настройки ИИ</h2><button type="button" id="close-settings" class="icon-button" aria-label="Закрыть">×</button></div>
+      <p id="key-help">Для генерации нужен ключ OpenAI API. Ключ действует до закрытия или обновления страницы. OpenAI может взимать плату за запросы.</p>
+      <label for="key">Ключ OpenAI API</label>
+      <input type="password" id="key" placeholder="sk-…" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="400" aria-describedby="key-help">
+      <p class="error" id="key-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button type="button" class="text-button" id="clear-key">Удалить ключ</button><button class="primary" type="submit">Сохранить для этой вкладки</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

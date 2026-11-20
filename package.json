@@ -1,0 +1,11 @@
+{
+  "name": "variant-trainer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env start.mjs",
+    "build": "node build.mjs --build"
+  }
+}
